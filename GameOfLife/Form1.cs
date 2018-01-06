@@ -33,11 +33,14 @@ namespace GameOfLife
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
             // The width and height of each cell in pixels
-            int cellWidth = 100;
-            int cellHeight = 100;
+            int cellWidth = graphicsPanel1.Width / universe.GetLength(0);
+            int cellHeight = graphicsPanel1.Height / universe.GetLength(1);
 
             // A Pen for drawing the grid lines (color, width)
             Pen gridPen = new Pen(gridColor, 1);
+
+            // Brush for filling in the cells depending on whether or not they're alive.
+            Brush cellPen = new SolidBrush(cellColor);
 
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
@@ -53,6 +56,10 @@ namespace GameOfLife
                     cellRect.Height = cellHeight;
 
                     // Fill the cell with a brush
+                    if (universe[x, y])
+                    {
+                        e.Graphics.FillRectangle(cellPen, cellRect);
+                    }
 
                     // Outline the cell with a pen
                     e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
@@ -61,6 +68,26 @@ namespace GameOfLife
 
             // Cleaning up pens and brushes
             gridPen.Dispose();
+        }
+
+        private void graphicsPanel1_MouseClick(object sender, MouseEventArgs e)
+        {
+            //Get the location clicked.
+            Point loc = e.Location;
+            
+            //Convert the coordinates to a cell.
+            int cellX = loc.X / (graphicsPanel1.Width / universe.GetLength(0));
+            int cellY = loc.Y / (graphicsPanel1.Height / universe.GetLength(1));
+
+            //Flip the cell's state.
+            universe[cellX, cellY] = !universe[cellX, cellY];
+
+            graphicsPanel1.Invalidate();
+        }
+
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+            graphicsPanel1.Invalidate();
         }
     }
 }
