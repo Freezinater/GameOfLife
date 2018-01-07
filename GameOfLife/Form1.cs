@@ -28,6 +28,32 @@ namespace GameOfLife
         public Form1()
         {
             InitializeComponent();
+
+            //Initialize timer
+            timer.Interval = 50;
+            timer.Enabled = false;
+            timer.Tick += Tick;
+
+            //Set up buttons on toolstrip.
+            tsb_advance.Enabled = true;
+            tsb_run.Enabled = true;
+            tsb_pause.Enabled = false;
+        }
+
+        private void Tick(object sender, EventArgs e)
+        {
+            //Advance 1 generation
+            NextGeneration();
+        }
+
+        private void NextGeneration()
+        {
+            // Increment generation count and update status label
+            generations++;
+            toolStripStatusLabel1.Text = "Generations: " + generations;
+
+            // Repaint the panel.
+            graphicsPanel1.Invalidate();
         }
 
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
@@ -74,6 +100,8 @@ namespace GameOfLife
         {
             //Get the location clicked.
             Point loc = e.Location;
+
+            //generations++;
             
             //Convert the coordinates to a cell.
             int cellX = loc.X / (graphicsPanel1.Width / universe.GetLength(0));
@@ -88,6 +116,29 @@ namespace GameOfLife
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
             graphicsPanel1.Invalidate();
+        }
+
+        private void tsb_advance_Click(object sender, EventArgs e)
+        {
+            NextGeneration();
+        }
+
+        private void tsb_pause_Click(object sender, EventArgs e)
+        {
+            timer.Stop();
+
+            tsb_advance.Enabled = true;
+            tsb_run.Enabled = true;
+            tsb_pause.Enabled = false;
+        }
+
+        private void tsb_run_Click(object sender, EventArgs e)
+        {
+            timer.Start();
+
+            tsb_advance.Enabled = false;
+            tsb_run.Enabled = false;
+            tsb_pause.Enabled = true;
         }
     }
 }
