@@ -125,8 +125,10 @@ namespace GameOfLife
 
         private void tsb_pause_Click(object sender, EventArgs e)
         {
+            // Stop the timer
             timer.Stop();
 
+            // Enable the run and advance buttons and disable the pause button.
             tsb_advance.Enabled = true;
             tsb_run.Enabled = true;
             tsb_pause.Enabled = false;
@@ -134,11 +136,28 @@ namespace GameOfLife
 
         private void tsb_run_Click(object sender, EventArgs e)
         {
+            // Start the timer.
             timer.Start();
 
+            // Disable the run and advance buttons and enable the pause button.
             tsb_advance.Enabled = false;
             tsb_run.Enabled = false;
             tsb_pause.Enabled = true;
+        }
+
+        private void tsb_clear_Click(object sender, EventArgs e)
+        {
+            for (int x = 0; x < universe.GetLength(0); x++)
+            {
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    // Kill all living cells.
+                    universe[x, y] = false;
+                }
+
+                // Repaint the screen.
+                graphicsPanel1.Invalidate();
+            }
         }
     }
 }

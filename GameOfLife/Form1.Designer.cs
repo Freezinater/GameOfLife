@@ -60,6 +60,8 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsb_clear = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tsb_advance = new System.Windows.Forms.ToolStripButton();
             this.tsb_run = new System.Windows.Forms.ToolStripButton();
             this.tsb_pause = new System.Windows.Forms.ToolStripButton();
@@ -309,6 +311,8 @@
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsb_clear,
+            this.toolStripSeparator6,
             this.tsb_advance,
             this.tsb_run,
             this.tsb_pause});
@@ -317,6 +321,22 @@
             this.toolStrip1.Size = new System.Drawing.Size(739, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // tsb_clear
+            // 
+            this.tsb_clear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsb_clear.Image = global::GameOfLife.Properties.Resources.Clear;
+            this.tsb_clear.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsb_clear.Name = "tsb_clear";
+            this.tsb_clear.Size = new System.Drawing.Size(23, 22);
+            this.tsb_clear.Text = "Reset Universe";
+            this.tsb_clear.ToolTipText = "Reset Universe";
+            this.tsb_clear.Click += new System.EventHandler(this.tsb_clear_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
             // 
             // tsb_advance
             // 
@@ -335,7 +355,8 @@
             this.tsb_run.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsb_run.Name = "tsb_run";
             this.tsb_run.Size = new System.Drawing.Size(23, 22);
-            this.tsb_run.Text = "Run";
+            this.tsb_run.Text = "Run Simulation";
+            this.tsb_run.ToolTipText = "Run Simulation";
             this.tsb_run.Click += new System.EventHandler(this.tsb_run_Click);
             // 
             // tsb_pause
@@ -345,7 +366,8 @@
             this.tsb_pause.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsb_pause.Name = "tsb_pause";
             this.tsb_pause.Size = new System.Drawing.Size(23, 22);
-            this.tsb_pause.Text = "toolStripButton3";
+            this.tsb_pause.Text = "Pause Simulation";
+            this.tsb_pause.ToolTipText = "Pause Simulation";
             this.tsb_pause.Click += new System.EventHandler(this.tsb_pause_Click);
             // 
             // statusStrip1
@@ -438,6 +460,8 @@
         private System.Windows.Forms.ToolStripButton tsb_advance;
         private System.Windows.Forms.ToolStripButton tsb_run;
         private System.Windows.Forms.ToolStripButton tsb_pause;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripButton tsb_clear;
     }
 }
 
