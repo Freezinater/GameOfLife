@@ -48,12 +48,82 @@ namespace GameOfLife
 
         private void NextGeneration()
         {
+            // Create a grid of the next generation of the current universe.
+            bool[,] nextGen = new bool[universe.GetLength(0), universe.GetLength(1)];
+
+            // Copy the current universe into this array.
+            for (int x = 0; x < universe.GetLength(0); x++)
+            {
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    nextGen[x, y] = universe[x, y];
+                }
+            }
+
+            // Loop through cells in the universe
+            for (int x = 0; x < universe.GetLength(0); x++)
+            {
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    // Process amount of living cells surrounding the current cell
+                    int neighbors = GetNeighborCount(universe, x, y);
+
+                    if (universe[x, y])
+                    {
+                        // Kill a living cell if it has less than 2 or more than 3 neighbors, otherwise do nothing
+                        if (neighbors < 2 || neighbors > 3)
+                        {
+                            nextGen[x, y] = false;
+                        }
+                    }
+                    else
+                    {
+                        // Bring a cell to life if it has exactly 3 neighbors.
+                        if (neighbors == 3)
+                        {
+                            nextGen[x, y] = true;
+                        }
+                    }
+                }
+            }
+
+            // Replace the current generation of the universe with the newly adjusted generation.
+            universe = nextGen;
+
             // Increment generation count and update status label
             generations++;
             toolStripStatusLabel1.Text = "Generations: " + generations;
 
             // Repaint the panel.
             graphicsPanel1.Invalidate();
+        }
+
+        private int GetNeighborCount(bool[,] grid, int x, int y)
+        {
+            int count = 0;
+
+            // Loop through the neighbors surrounding the passed in coordinates.
+            for (int ix = x - 1; ix <= x + 1; ix++)
+            {
+                for (int iy = y - 1; iy <= y + 1; iy++)
+                {
+                    // Check that the coordinate is in bounds of the array.
+                    if (!(iy < 0 || iy >= grid.GetLength(1) || ix < 0 || ix >= grid.GetLength(0)))
+                    {
+                        // Check that the coordinates are not the ones of the cell passed in. We don't want to count it as a living neighbor.
+                        if (ix != x || iy != y)
+                        {
+                            // Increment count if the neighbor cell is alive.
+                            if (grid[ix, iy])
+                            {
+                                count++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return count;
         }
 
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)

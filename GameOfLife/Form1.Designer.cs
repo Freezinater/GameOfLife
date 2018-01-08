@@ -383,8 +383,8 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(76, 17);
-            this.toolStripStatusLabel1.Text = "Generations: ";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(82, 17);
+            this.toolStripStatusLabel1.Text = "Generations: 0";
             // 
             // graphicsPanel1
             // 
