@@ -225,6 +225,10 @@ namespace GameOfLife
                     universe[x, y] = false;
                 }
 
+                // Reset generation count and update status label
+                generations = 0;
+                toolStripStatusLabel1.Text = "Generations: " + generations;
+
                 // Repaint the screen.
                 graphicsPanel1.Invalidate();
             }
