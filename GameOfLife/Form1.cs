@@ -34,21 +34,17 @@ namespace GameOfLife
             timer.Enabled = false;
             timer.Tick += Tick;
 
-            //Set up buttons on toolstrip.
-            tsb_advance.Enabled = true;
-            tsb_run.Enabled = true;
+            //Disable pause buttons on toolstrip and dropdown menu.
             tsb_pause.Enabled = false;
+            pauseToolStripMenuItem.Enabled = false;
         }
 
-        private void Tick(object sender, EventArgs e)
-        {
-            //Advance 1 generation
-            NextGeneration();
-        }
-
+        // NextGeneration - Simulates advancing the universe by 1 generation.
+        //
+        // Parameters: None
         private void NextGeneration()
         {
-            // Create a grid of the next generation of the current universe.
+            // Create a grid to represent the next generation of the current universe.
             bool[,] nextGen = new bool[universe.GetLength(0), universe.GetLength(1)];
 
             // Copy the current universe into this array.
@@ -98,6 +94,12 @@ namespace GameOfLife
             graphicsPanel1.Invalidate();
         }
 
+        // GetNeighborCount - Returns the amount of cells living surrounding the specified cell coordinates.
+        //
+        // Parameters:
+        // bool[,] grid - The universe we're searching through.
+        // int x - The x coordinate of the cell whose neighbors we're counting.
+        // int y - The y coordinate of the cell whose neighbors we're counting.
         private int GetNeighborCount(bool[,] grid, int x, int y)
         {
             int count = 0;
@@ -126,6 +128,65 @@ namespace GameOfLife
             return count;
         }
 
+        // StopSim() - Stops the simulation.
+        //
+        // Parameters: None
+        private void StopSim()
+        {
+            // Stop the timer
+            timer.Stop();
+
+            // Enable the run and advance buttons and disable the pause button.
+            tsb_advance.Enabled = true;
+            tsb_run.Enabled = true;
+            tsb_pause.Enabled = false;
+
+            advanceToolStripMenuItem.Enabled = true;
+            startToolStripMenuItem.Enabled = true;
+            pauseToolStripMenuItem.Enabled = false;
+        }
+
+        // StartSim() - Starts simulating generations of the universe.
+        //
+        // Parameters: None
+        private void StartSim()
+        {
+            // Start the timer.
+            timer.Start();
+
+            // Disable the run and advance buttons and enable the pause button.
+            tsb_advance.Enabled = false;
+            tsb_run.Enabled = false;
+            tsb_pause.Enabled = true;
+
+            advanceToolStripMenuItem.Enabled = false;
+            startToolStripMenuItem.Enabled = false;
+            pauseToolStripMenuItem.Enabled = true;
+        }
+
+        // ClearUniverse() - Clears the universe.
+        //
+        // Parameters: None
+        private void ClearUniverse()
+        {
+            for (int x = 0; x < universe.GetLength(0); x++)
+            {
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    // Kill all living cells.
+                    universe[x, y] = false;
+                }
+
+                // Reset generation count and update status label
+                generations = 0;
+                toolStripStatusLabel1.Text = "Generations: " + generations;
+
+                // Repaint the screen.
+                graphicsPanel1.Invalidate();
+            }
+        }
+
+        // Event Handlers
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
             // The width and height of each cell in pixels
@@ -166,6 +227,12 @@ namespace GameOfLife
             gridPen.Dispose();
         }
 
+        private void Tick(object sender, EventArgs e)
+        {
+            //Advance 1 generation
+            NextGeneration();
+        }
+
         private void graphicsPanel1_MouseClick(object sender, MouseEventArgs e)
         {
             //Get the location clicked.
@@ -195,43 +262,37 @@ namespace GameOfLife
 
         private void tsb_pause_Click(object sender, EventArgs e)
         {
-            // Stop the timer
-            timer.Stop();
-
-            // Enable the run and advance buttons and disable the pause button.
-            tsb_advance.Enabled = true;
-            tsb_run.Enabled = true;
-            tsb_pause.Enabled = false;
+            StopSim();
         }
 
         private void tsb_run_Click(object sender, EventArgs e)
         {
-            // Start the timer.
-            timer.Start();
-
-            // Disable the run and advance buttons and enable the pause button.
-            tsb_advance.Enabled = false;
-            tsb_run.Enabled = false;
-            tsb_pause.Enabled = true;
+            StartSim();
         }
 
         private void tsb_clear_Click(object sender, EventArgs e)
         {
-            for (int x = 0; x < universe.GetLength(0); x++)
-            {
-                for (int y = 0; y < universe.GetLength(1); y++)
-                {
-                    // Kill all living cells.
-                    universe[x, y] = false;
-                }
+            ClearUniverse();
+        }
 
-                // Reset generation count and update status label
-                generations = 0;
-                toolStripStatusLabel1.Text = "Generations: " + generations;
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClearUniverse();
+        }
 
-                // Repaint the screen.
-                graphicsPanel1.Invalidate();
-            }
+        private void advanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NextGeneration();
+        }
+
+        private void startToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StartSim();
+        }
+
+        private void pauseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StopSim();
         }
     }
 }
