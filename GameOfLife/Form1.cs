@@ -190,8 +190,8 @@ namespace GameOfLife
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
             // The width and height of each cell in pixels
-            int cellWidth = graphicsPanel1.Width / universe.GetLength(0);
-            int cellHeight = graphicsPanel1.Height / universe.GetLength(1);
+            float cellWidth = (float) graphicsPanel1.Width / universe.GetLength(0);
+            float cellHeight = (float) graphicsPanel1.Height / universe.GetLength(1);
 
             // A Pen for drawing the grid lines (color, width)
             Pen gridPen = new Pen(gridColor, 1);
@@ -206,7 +206,7 @@ namespace GameOfLife
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
                     // A rectangle to represent each cell in pixels
-                    Rectangle cellRect = Rectangle.Empty;
+                    RectangleF cellRect = RectangleF.Empty;
                     cellRect.X = x * cellWidth;
                     cellRect.Y = y * cellHeight;
                     cellRect.Width = cellWidth;
