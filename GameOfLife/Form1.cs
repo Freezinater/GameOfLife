@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -219,6 +220,50 @@ namespace GameOfLife
                     }
                 }
             }
+
+            graphicsPanel1.Invalidate();
+        }
+
+        private void SaveUniverse()
+        {
+            string filepath;
+            DateTime date;
+
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.AddExtension = true;
+            dlg.DefaultExt = ".cells";
+            dlg.Filter += "Universe Files (*.cells)|*.cells";
+            dlg.Filter += "|All Files (*.*)|*.*";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                filepath = dlg.FileName;
+                date = DateTime.Now;
+                string[] formats = date.GetDateTimeFormats();
+
+                StreamWriter writer = new StreamWriter(filepath);
+
+                writer.WriteLine("!" + formats[43]);
+
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    for (int x = 0; x < universe.GetLength(0); x++)
+                    {
+                        if (universe[x, y])
+                        {
+                            writer.Write("O");
+                        }
+                        else
+                        {
+                            writer.Write(".");
+                        }
+                    }
+
+                    writer.WriteLine();
+                }
+
+                writer.Close();
+            }
         }
 
         // Event Handlers
@@ -337,14 +382,12 @@ namespace GameOfLife
             // Gets a long of the ticks of the current date and time. Afterwards, cast it to an int.
             seed = (int) DateTime.Now.Ticks;
             RandomizeUniverse(seed);
-            graphicsPanel1.Invalidate();
         }
 
         private void fromCurrentSeedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Does nothing with the current seed and just creates a new universe with said seed.
             RandomizeUniverse(seed);
-            graphicsPanel1.Invalidate();
         }
 
         private void fromNewSeedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -355,8 +398,12 @@ namespace GameOfLife
             {
                 seed = dlg.seed;
                 RandomizeUniverse(seed);
-                graphicsPanel1.Invalidate();
             }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveUniverse();
         }
     }
 }
