@@ -15,6 +15,12 @@ namespace GameOfLife
         // The universe array
         bool[,] universe = new bool[5, 5];
 
+        // The random number generator
+        Random rng = new Random();
+
+        // The seed for the random number generator
+        int seed;
+
         // Drawing colors
         Color gridColor = Color.Black;
         Color cellColor = Color.Gray;
@@ -29,12 +35,15 @@ namespace GameOfLife
         {
             InitializeComponent();
 
-            //Initialize timer
+            // Initialize timer
             timer.Interval = 50;
             timer.Enabled = false;
             timer.Tick += Tick;
 
-            //Disable pause buttons on toolstrip and dropdown menu.
+            // Initialize the seed.
+            seed = rng.Next();
+
+            // Disable pause buttons on toolstrip and dropdown menu.
             tsb_pause.Enabled = false;
             pauseToolStripMenuItem.Enabled = false;
         }
@@ -128,7 +137,7 @@ namespace GameOfLife
             return count;
         }
 
-        // StopSim() - Stops the simulation.
+        // StopSim - Stops the simulation.
         //
         // Parameters: None
         private void StopSim()
@@ -146,7 +155,7 @@ namespace GameOfLife
             pauseToolStripMenuItem.Enabled = false;
         }
 
-        // StartSim() - Starts simulating generations of the universe.
+        // StartSim - Starts simulating generations of the universe.
         //
         // Parameters: None
         private void StartSim()
@@ -164,7 +173,7 @@ namespace GameOfLife
             pauseToolStripMenuItem.Enabled = true;
         }
 
-        // ClearUniverse() - Clears the universe.
+        // ClearUniverse - Clears the universe.
         //
         // Parameters: None
         private void ClearUniverse()
@@ -183,6 +192,32 @@ namespace GameOfLife
 
                 // Repaint the screen.
                 graphicsPanel1.Invalidate();
+            }
+        }
+
+        // RandomizeUniverse - Randomizes the current array.
+        //
+        // Parameters:
+        // int seed - The seed for the rng.
+        private void RandomizeUniverse(int seed)
+        {
+            rng = new Random(seed);
+
+            for (int x = 0; x < universe.GetLength(0); x++)
+            {
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    int temp = rng.Next(2);
+
+                    if (temp == 1)
+                    {
+                        universe[x, y] = true;
+                    }
+                    else
+                    {
+                        universe[x, y] = false;
+                    }
+                }
             }
         }
 
@@ -225,6 +260,8 @@ namespace GameOfLife
 
             // Cleaning up pens and brushes
             gridPen.Dispose();
+
+            seed_statusLabel.Text = "Seed: " + seed;
         }
 
         private void Tick(object sender, EventArgs e)
@@ -293,6 +330,33 @@ namespace GameOfLife
         private void pauseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StopSim();
+        }
+
+        private void fromSystemTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Gets a long of the ticks of the current date and time. Afterwards, cast it to an int.
+            seed = (int) DateTime.Now.Ticks;
+            RandomizeUniverse(seed);
+            graphicsPanel1.Invalidate();
+        }
+
+        private void fromCurrentSeedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Does nothing with the current seed and just creates a new universe with said seed.
+            RandomizeUniverse(seed);
+            graphicsPanel1.Invalidate();
+        }
+
+        private void fromNewSeedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SeedDialog dlg = new SeedDialog();
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                seed = dlg.seed;
+                RandomizeUniverse(seed);
+                graphicsPanel1.Invalidate();
+            }
         }
     }
 }
