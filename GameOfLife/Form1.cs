@@ -377,6 +377,8 @@ namespace GameOfLife
             // Brush for filling in the cells depending on whether or not they're alive.
             Brush cellPen = new SolidBrush(cellColor);
 
+            Brush livePen = new SolidBrush(Color.Green);
+            Brush deadPen = new SolidBrush(Color.Red);
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
             {
@@ -398,6 +400,30 @@ namespace GameOfLife
 
                     // Outline the cell with a pen
                     e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+
+                    // Draw the neighbor count of the cell IF it has neighbors.
+                    int neighbors = GetNeighborCount(universe, x, y);
+                    if (neighbors > 0)
+                    {
+                        Brush temp;
+
+                        // Make the number red or green depending on the cell's state next generation.
+                        if (universe[x, y])
+                        {
+                            if (neighbors < 2 || neighbors > 3)
+                                temp = deadPen;
+                            else
+                                temp = livePen;
+                        }
+                        else
+                        {
+                            if (neighbors == 3)
+                                temp = livePen;
+                            else
+                                temp = deadPen;
+                        }
+                        e.Graphics.DrawString("" + GetNeighborCount(universe, x, y), graphicsPanel1.Font, temp, (cellRect.X + cellRect.Width / 2) - 8, (cellRect.Y + cellRect.Height / 2) - 8);
+                    }
                 }
             }
 
