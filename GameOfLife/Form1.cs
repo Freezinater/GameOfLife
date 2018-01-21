@@ -224,31 +224,44 @@ namespace GameOfLife
             graphicsPanel1.Invalidate();
         }
 
+        // SaveUniverse - Saves the universe array to a file given via SaveFileDialog
+        //
+        // Parameters: None
         private void SaveUniverse()
         {
+            // Set up initial variables
             string filepath;
             DateTime date;
 
+            // Set up SaveFileDialog
             SaveFileDialog dlg = new SaveFileDialog();
             dlg.AddExtension = true;
             dlg.DefaultExt = ".cells";
             dlg.Filter += "Universe Files (*.cells)|*.cells";
             dlg.Filter += "|All Files (*.*)|*.*";
 
+            // Check if user selected the Save button.
             if (dlg.ShowDialog() == DialogResult.OK)
             {
+                // Get the file path
                 filepath = dlg.FileName;
-                date = DateTime.Now;
-                string[] formats = date.GetDateTimeFormats();
 
+                // Get the date and time along with a formatted string.
+                date = DateTime.Now;
+                string dateString = date.GetDateTimeFormats()[43]; // M/D/YYYY H:MM AM/PM
+
+                // Prepare StreamWriter
                 StreamWriter writer = new StreamWriter(filepath);
 
-                writer.WriteLine("!" + formats[43]);
+                // Write initial date and time to file.
+                writer.WriteLine("!" + dateString);
 
+                // Loop through the universe
                 for (int y = 0; y < universe.GetLength(1); y++)
                 {
                     for (int x = 0; x < universe.GetLength(0); x++)
                     {
+                        // Write the appropriate characters depending on cell's state.
                         if (universe[x, y])
                         {
                             writer.Write("O");
@@ -259,10 +272,95 @@ namespace GameOfLife
                         }
                     }
 
+                    // Start new line after each row.
                     writer.WriteLine();
                 }
 
+                // Close the writer.
                 writer.Close();
+            }
+        }
+
+        // LoadUniverse - Load a universe from a file given via OpenFileDialog
+        //
+        // Parameters: None
+        private void LoadUniverse()
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+
+            dlg.DefaultExt = ".cells";
+            dlg.Filter += "Universe Files (*.cells)|*.cells";
+            dlg.Filter += "| All Files (*.*)|*.*";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                string filepath = dlg.FileName;
+
+                StreamReader reader = new StreamReader(filepath);
+
+                try
+                {
+                    // Skip past initial date/time line
+                    reader.ReadLine();
+
+                    // Read in the first line and take its length - 1 to get universe width
+                    string text = reader.ReadLine() + "\n";
+                    int loadWidth = text.Length - 1;
+
+                    // Initialize the height of the universe because we have at least 1 row in file.
+                    int loadHeight = 1;
+
+                    // Count the remaining lines while adding them to the previous string's contents.
+                    while (!reader.EndOfStream)
+                    {
+                        text += reader.ReadLine() + "\n";
+                        loadHeight++;
+                    }
+
+                    // Close the string.
+                    reader.Close();
+
+                    // Prepare to read through the newly made string.
+                    StringReader strReader = new StringReader(text);
+
+                    // Create new bool array of the size given via file.
+                    bool[,] loaded = new bool[loadWidth, loadHeight];
+                    int x = 0, y = 0;
+
+                    // String to hold contents returned via the StringReader
+                    string line;
+
+                    // Read through the string and set cells as needed.
+                    while (!((line = strReader.ReadLine()) == null))
+                    {
+                        for (x = 0; x < line.Length; x++)
+                        {
+                            loaded[x, y] = (line[x] == 'O');
+                        }
+
+                        y++;
+                    }
+
+                    // Assign the new array to the current universe
+                    universe = loaded;
+
+                    // Close the StringReader
+                    reader.Close();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("There was an error loading the file.\n\n" + e.Message + "\n\nFile path: " + filepath);
+                }
+                finally
+                {
+                    // Check if reader is closed and close it if not.
+                    if (reader.BaseStream == null)
+                    {
+                        reader.Close();
+                    }
+                    
+                    graphicsPanel1.Invalidate();
+                }
             }
         }
 
@@ -392,10 +490,12 @@ namespace GameOfLife
 
         private void fromNewSeedToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Create a dialog to allow user to input seed.
             SeedDialog dlg = new SeedDialog();
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
+                // Randomize universe on given seed.
                 seed = dlg.seed;
                 RandomizeUniverse(seed);
             }
@@ -404,6 +504,11 @@ namespace GameOfLife
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveUniverse();
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadUniverse();
         }
     }
 }
