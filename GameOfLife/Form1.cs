@@ -13,8 +13,11 @@ namespace GameOfLife
 {
     public partial class Form1 : Form
     {
+        // Variables for universe size
+        int width, height;
+
         // The universe array
-        bool[,] universe = new bool[5, 5];
+        bool[,] universe;
 
         // The random number generator
         Random rng = new Random();
@@ -32,21 +35,39 @@ namespace GameOfLife
         // Generation count
         int generations = 0;
 
+        // View settings
+        bool gridVisibility, neighborCountVisiblity;
+
+        // Timer delay setting
+        int genDelay;
+
         public Form1()
         {
+            // Initialize Settings
+            width = Properties.Settings.Default.UniverseWidth;
+            height = Properties.Settings.Default.UniverseHeight;
+            neighborCountVisiblity = Properties.Settings.Default.NeighborCountVisible;
+            gridVisibility = Properties.Settings.Default.GridVisible;
+            genDelay = Properties.Settings.Default.GenerationDelay;
+
+            universe = new bool[width, height];
             InitializeComponent();
 
             // Initialize timer
-            timer.Interval = 50;
+            timer.Interval = genDelay;
             timer.Enabled = false;
             timer.Tick += Tick;
 
             // Initialize the seed.
             seed = rng.Next();
-
+            
             // Disable pause buttons on toolstrip and dropdown menu.
             tsb_pause.Enabled = false;
             pauseToolStripMenuItem.Enabled = false;
+
+            // Initialize button states from settings
+            gridVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.GridVisible;
+            neighborCountVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.NeighborCountVisible;
         }
 
         // NextGeneration - Simulates advancing the universe by 1 generation.
@@ -179,21 +200,15 @@ namespace GameOfLife
         // Parameters: None
         private void ClearUniverse()
         {
-            for (int x = 0; x < universe.GetLength(0); x++)
-            {
-                for (int y = 0; y < universe.GetLength(1); y++)
-                {
-                    // Kill all living cells.
-                    universe[x, y] = false;
-                }
+            StopSim();
+            universe = new bool[width, height];
 
-                // Reset generation count and update status label
-                generations = 0;
-                toolStripStatusLabel1.Text = "Generations: " + generations;
+            // Reset generation count and update status label
+            generations = 0;
+            toolStripStatusLabel1.Text = "Generations: " + generations;
 
-                // Repaint the screen.
-                graphicsPanel1.Invalidate();
-            }
+            // Repaint the screen.
+            graphicsPanel1.Invalidate();
         }
 
         // RandomizeUniverse - Randomizes the current array.
@@ -420,31 +435,36 @@ namespace GameOfLife
                         e.Graphics.FillRectangle(cellPen, cellRect);
                     }
 
-                    // Outline the cell with a pen
-                    e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
-
-                    // Draw the neighbor count of the cell IF it has neighbors.
-                    int neighbors = GetNeighborCount(universe, x, y);
-                    if (neighbors > 0)
+                    // Outline the cell with a pen if the grid is enabled.
+                    if (gridVisibility)
                     {
-                        Brush temp;
+                        e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                    }
+                    if (neighborCountVisiblity)
+                    {
+                        // Draw the neighbor count of the cell IF it has neighbors and neighbor counts are enabled.
+                        int neighbors = GetNeighborCount(universe, x, y);
+                        if (neighbors > 0)
+                        {
+                            Brush temp;
 
-                        // Make the number red or green depending on the cell's state next generation.
-                        if (universe[x, y])
-                        {
-                            if (neighbors < 2 || neighbors > 3)
-                                temp = deadPen;
+                            // Make the number red or green depending on the cell's state next generation.
+                            if (universe[x, y])
+                            {
+                                if (neighbors < 2 || neighbors > 3)
+                                    temp = deadPen;
+                                else
+                                    temp = livePen;
+                            }
                             else
-                                temp = livePen;
+                            {
+                                if (neighbors == 3)
+                                    temp = livePen;
+                                else
+                                    temp = deadPen;
+                            }
+                            e.Graphics.DrawString("" + GetNeighborCount(universe, x, y), graphicsPanel1.Font, temp, (cellRect.X + cellRect.Width / 2) - 8, (cellRect.Y + cellRect.Height / 2) - 8);
                         }
-                        else
-                        {
-                            if (neighbors == 3)
-                                temp = livePen;
-                            else
-                                temp = deadPen;
-                        }
-                        e.Graphics.DrawString("" + GetNeighborCount(universe, x, y), graphicsPanel1.Font, temp, (cellRect.X + cellRect.Width / 2) - 8, (cellRect.Y + cellRect.Height / 2) - 8);
                     }
                 }
             }
@@ -553,6 +573,71 @@ namespace GameOfLife
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveUniverse();
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Initialize and open our settings window.
+            SettingsDialog dlg = new SettingsDialog();
+
+            dlg.WidthValue = width;
+            dlg.HeightValue = height;
+            dlg.DelayValue = genDelay;
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                // Check if universe size has been changed. Resize and reset universe if so.
+                if (width != dlg.WidthValue || height != dlg.HeightValue)
+                {
+                    width = dlg.WidthValue;
+                    height = dlg.HeightValue;
+
+                    ClearUniverse();
+                }
+
+                genDelay = timer.Interval = dlg.DelayValue;
+            }
+        }
+
+        private void gridVisible_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Toggle the checked status of the button along with the actual setting
+            if (gridVisible_ToolStripMenuItem.Checked)
+            {
+                gridVisibility = gridVisible_ToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                gridVisibility = gridVisible_ToolStripMenuItem.Checked = true;
+            }
+
+            graphicsPanel1.Invalidate();
+        }
+
+        private void neighborCountVisible_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Toggle the checked status of the button along with the actual setting
+            if (neighborCountVisible_ToolStripMenuItem.Checked)
+            {
+                neighborCountVisiblity = neighborCountVisible_ToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                neighborCountVisiblity = neighborCountVisible_ToolStripMenuItem.Checked = true;
+            }
+
+            graphicsPanel1.Invalidate();
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Properties.Settings.Default.GridVisible = gridVisibility;
+            Properties.Settings.Default.NeighborCountVisible = neighborCountVisiblity;
+            Properties.Settings.Default.UniverseHeight = height;
+            Properties.Settings.Default.UniverseWidth = width;
+            Properties.Settings.Default.GenerationDelay = genDelay;
+
+            Properties.Settings.Default.Save();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
