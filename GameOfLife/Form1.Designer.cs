@@ -67,6 +67,7 @@
             this.fromCurrentSeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromNewSeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.graphicsPanel1 = new GameOfLife.GraphicsPanel();
+            this.liveCells_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -328,7 +329,8 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
-            this.seed_statusLabel});
+            this.seed_statusLabel,
+            this.liveCells_statusLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 442);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(739, 22);
@@ -389,6 +391,12 @@
             this.graphicsPanel1.TabIndex = 3;
             this.graphicsPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.graphicsPanel1_Paint);
             this.graphicsPanel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
+            // 
+            // liveCells_statusLabel
+            // 
+            this.liveCells_statusLabel.Name = "liveCells_statusLabel";
+            this.liveCells_statusLabel.Size = new System.Drawing.Size(73, 17);
+            this.liveCells_statusLabel.Text = "Living Cells: ";
             // 
             // Form1
             // 
@@ -454,6 +462,7 @@
         private System.Windows.Forms.ToolStripMenuItem fromSystemTimeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fromCurrentSeedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fromNewSeedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel liveCells_statusLabel;
     }
 }
 

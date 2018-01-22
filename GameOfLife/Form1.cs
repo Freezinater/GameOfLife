@@ -364,6 +364,28 @@ namespace GameOfLife
             }
         }
 
+        // CountLivingCells - Counts the amount of live cells in the universe
+        //
+        // Parameters: None
+        private int CountLivingCells()
+        {
+            int count = 0;
+
+            // Loop through the universe
+            for (int x = 0; x < universe.GetLength(0); x++)
+            {
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    if (universe[x, y])
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+
         // Event Handlers
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
@@ -431,6 +453,7 @@ namespace GameOfLife
             gridPen.Dispose();
 
             seed_statusLabel.Text = "Seed: " + seed;
+            liveCells_statusLabel.Text = "Living Cells: " + CountLivingCells();
         }
 
         private void Tick(object sender, EventArgs e)
