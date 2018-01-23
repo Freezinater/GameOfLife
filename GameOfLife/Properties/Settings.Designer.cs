@@ -130,5 +130,17 @@ namespace GameOfLife.Properties {
                 this["LiveCellColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HUDVisible {
+            get {
+                return ((bool)(this["HUDVisible"]));
+            }
+            set {
+                this["HUDVisible"] = value;
+            }
+        }
     }
 }

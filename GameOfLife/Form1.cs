@@ -37,7 +37,7 @@ namespace GameOfLife
         int generations = 0;
 
         // View settings
-        bool gridVisibility, neighborCountVisiblity;
+        bool gridVisibility, neighborCountVisiblity, hudVisiblity;
 
         // Boundary settings
         bool boundaryWrap;
@@ -443,6 +443,7 @@ namespace GameOfLife
             gridColor = Properties.Settings.Default.GridColor;
             cellColor = Properties.Settings.Default.LiveCellColor;
             backgroundColor = Properties.Settings.Default.DeadCellColor;
+            hudVisiblity = Properties.Settings.Default.HUDVisible;
         }
 
         // ApplySettings - Apply Settings
@@ -458,6 +459,7 @@ namespace GameOfLife
             // Initialize button states from settings
             gridVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.GridVisible;
             neighborCountVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.NeighborCountVisible;
+            hudVisibleToolStripMenuItem.Checked = Properties.Settings.Default.HUDVisible;
         }
 
         // Event Handlers
@@ -475,6 +477,7 @@ namespace GameOfLife
 
             Brush livePen = new SolidBrush(Color.Green);
             Brush deadPen = new SolidBrush(Color.Red);
+
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
             {
@@ -526,6 +529,13 @@ namespace GameOfLife
                         }
                     }
                 }
+            }
+
+            // Draw HUD
+            if (hudVisiblity)
+            {
+                Font tempFont = new Font(new FontFamily("Arial"), 16, FontStyle.Regular, GraphicsUnit.Pixel);
+                e.Graphics.DrawString("Generations: " + generations + "\nLive Cells: " + CountLivingCells() + "\nBoundary Type: " + (boundaryWrap ? "Torroidal" : "Normal") + "\nSize: " + width + "x" + height, tempFont, deadPen, 4, graphicsPanel1.Height - 72);
             }
 
             // Cleaning up pens and brushes
@@ -677,6 +687,8 @@ namespace GameOfLife
                 gridColor = dlg.GridColorValue;
                 cellColor = dlg.LiveCellColorValue;
             }
+
+            graphicsPanel1.Invalidate();
         }
 
         private void gridVisible_ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -699,6 +711,21 @@ namespace GameOfLife
             LoadSettings();
             ClearUniverse();
             ApplySettings();
+        }
+
+        private void hudVisibleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Toggle the checked status of the button along with the actual setting
+            if (hudVisibleToolStripMenuItem.Checked)
+            {
+                hudVisiblity = hudVisibleToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                hudVisiblity = hudVisibleToolStripMenuItem.Checked = true;
+            }
+
+            graphicsPanel1.Invalidate();
         }
 
         private void resetSettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -737,6 +764,7 @@ namespace GameOfLife
             Properties.Settings.Default.GridColor = gridColor;
             Properties.Settings.Default.DeadCellColor = backgroundColor;
             Properties.Settings.Default.LiveCellColor = cellColor;
+            Properties.Settings.Default.HUDVisible = hudVisiblity;
 
             Properties.Settings.Default.Save();
         }

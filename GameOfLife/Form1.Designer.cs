@@ -72,6 +72,7 @@
             this.reloadSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.graphicsPanel1 = new GameOfLife.GraphicsPanel();
+            this.hudVisibleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -209,7 +210,8 @@
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.gridVisible_ToolStripMenuItem,
-            this.neighborCountVisible_ToolStripMenuItem});
+            this.neighborCountVisible_ToolStripMenuItem,
+            this.hudVisibleToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "&View";
@@ -440,6 +442,15 @@
             this.graphicsPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.graphicsPanel1_Paint);
             this.graphicsPanel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
             // 
+            // hudVisibleToolStripMenuItem
+            // 
+            this.hudVisibleToolStripMenuItem.Checked = true;
+            this.hudVisibleToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.hudVisibleToolStripMenuItem.Name = "hudVisibleToolStripMenuItem";
+            this.hudVisibleToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.hudVisibleToolStripMenuItem.Text = "HUD Visible";
+            this.hudVisibleToolStripMenuItem.Click += new System.EventHandler(this.hudVisibleToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -510,6 +521,7 @@
         private System.Windows.Forms.ToolStripMenuItem neighborCountVisible_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reloadSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hudVisibleToolStripMenuItem;
     }
 }
 
