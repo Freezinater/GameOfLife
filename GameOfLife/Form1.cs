@@ -55,8 +55,9 @@ namespace GameOfLife
 
             graphicsPanel1.BackColor = backgroundColor;
 
+            ApplySettings();
+
             // Initialize timer
-            timer.Interval = genDelay;
             timer.Enabled = false;
             timer.Tick += Tick;
 
@@ -67,9 +68,6 @@ namespace GameOfLife
             tsb_pause.Enabled = false;
             pauseToolStripMenuItem.Enabled = false;
 
-            // Initialize button states from settings
-            gridVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.GridVisible;
-            neighborCountVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.NeighborCountVisible;
         }
 
         // NextGeneration - Simulates advancing the universe by 1 generation.
@@ -447,6 +445,21 @@ namespace GameOfLife
             backgroundColor = Properties.Settings.Default.DeadCellColor;
         }
 
+        // ApplySettings - Apply Settings
+        //
+        // Parameters: None
+        private void ApplySettings()
+        {
+            //Apply background color
+            graphicsPanel1.BackColor = backgroundColor;
+            // Set Timer Interval
+            timer.Interval = genDelay;
+
+            // Initialize button states from settings
+            gridVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.GridVisible;
+            neighborCountVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.NeighborCountVisible;
+        }
+
         // Event Handlers
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
@@ -530,19 +543,22 @@ namespace GameOfLife
 
         private void graphicsPanel1_MouseClick(object sender, MouseEventArgs e)
         {
-            //Get the location clicked.
-            Point loc = e.Location;
+            if (e.Button == MouseButtons.Left)
+            {
+                //Get the location clicked.
+                Point loc = e.Location;
 
-            //generations++;
-            
-            //Convert the coordinates to a cell.
-            int cellX = loc.X / (graphicsPanel1.Width / universe.GetLength(0));
-            int cellY = loc.Y / (graphicsPanel1.Height / universe.GetLength(1));
+                //generations++;
 
-            //Flip the cell's state.
-            universe[cellX, cellY] = !universe[cellX, cellY];
+                //Convert the coordinates to a cell.
+                int cellX = loc.X / (graphicsPanel1.Width / universe.GetLength(0));
+                int cellY = loc.Y / (graphicsPanel1.Height / universe.GetLength(1));
 
-            graphicsPanel1.Invalidate();
+                //Flip the cell's state.
+                universe[cellX, cellY] = !universe[cellX, cellY];
+
+                graphicsPanel1.Invalidate();
+            }
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
@@ -676,6 +692,22 @@ namespace GameOfLife
             }
 
             graphicsPanel1.Invalidate();
+        }
+
+        private void reloadSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadSettings();
+            ClearUniverse();
+            ApplySettings();
+        }
+
+        private void resetSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+
+            LoadSettings();
+            ClearUniverse();
+            ApplySettings();
         }
 
         private void neighborCountVisible_ToolStripMenuItem_Click(object sender, EventArgs e)
