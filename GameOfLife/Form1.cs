@@ -321,9 +321,11 @@ namespace GameOfLife
 
         // LoadUniverse - Load a universe from a file given via OpenFileDialog
         //
-        // Parameters: None
-        private void LoadUniverse()
+        // Parameters:
+        // overwrite - Clear the universe before loading in the new one.
+        private void LoadUniverse(bool overwrite = true)
         {
+            StopSim();
             OpenFileDialog dlg = new OpenFileDialog();
 
             dlg.DefaultExt = ".cells";
@@ -338,11 +340,19 @@ namespace GameOfLife
 
                 try
                 {
+                    // Initialize variable for holding file contents.
+                    string text;
+
                     // Skip past initial date/time line
-                    reader.ReadLine();
+                    do
+                    {
+                        text = reader.ReadLine();
+                    } while (text.StartsWith("!"));
+
+                    // Add a new line to the string. Used to divide rows.
+                    text += "\n";
 
                     // Read in the first line and take its length - 1 to get universe width
-                    string text = reader.ReadLine() + "\n";
                     int loadWidth = text.Length - 1;
 
                     // Initialize the height of the universe because we have at least 1 row in file.
@@ -362,18 +372,35 @@ namespace GameOfLife
                     StringReader strReader = new StringReader(text);
 
                     // Create new bool array of the size given via file.
-                    bool[,] loaded = new bool[loadWidth, loadHeight];
+                    bool[,] loaded;
+
+                    if (overwrite)
+                    {
+                        loaded = new bool[loadWidth, loadHeight];
+                    }
+                    else
+                    {
+                        loaded = universe;
+                    }
+
                     int x = 0, y = 0;
 
                     // String to hold contents returned via the StringReader
                     string line;
 
                     // Read through the string and set cells as needed.
-                    while (!((line = strReader.ReadLine()) == null))
+                    while ((!((line = strReader.ReadLine()) == null)) && y < loaded.GetLength(1))
                     {
-                        for (x = 0; x < line.Length; x++)
+                        for (x = 0; x < Math.Min(line.Length, loaded.GetLength(0)); x++)
                         {
-                            loaded[x, y] = (line[x] == 'O');
+                            if (overwrite)
+                            {
+                                loaded[x, y] = (line[x] == 'O');
+                            }
+                            else
+                            {
+                                loaded[x, y] = (line[x] == 'O' || loaded[x, y]);
+                            }
                         }
 
                         y++;
@@ -384,6 +411,15 @@ namespace GameOfLife
 
                     // Close the StringReader
                     reader.Close();
+
+                    // Reset generations count and dimension settings if overwriting.
+                    if (overwrite)
+                    {
+                        generations = 0;
+                        
+                        width = universe.GetLength(0);
+                        height = universe.GetLength(1);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -726,6 +762,11 @@ namespace GameOfLife
             }
 
             graphicsPanel1.Invalidate();
+        }
+
+        private void import_toolStripItem_Click(object sender, EventArgs e)
+        {
+            LoadUniverse(false);
         }
 
         private void resetSettingsToolStripMenuItem_Click(object sender, EventArgs e)
