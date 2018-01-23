@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,11 +72,20 @@
             this.liveCells_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.reloadSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.graphicsPanel1 = new GameOfLife.GraphicsPanel();
             this.hudVisibleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.neighborCountVisibleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gridVisibleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hudVisibleToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.advanceToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.pauseToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.graphicsPanel1 = new GameOfLife.GraphicsPanel();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -430,6 +440,78 @@
             this.resetSettingsToolStripMenuItem.Text = "Reset Settings";
             this.resetSettingsToolStripMenuItem.Click += new System.EventHandler(this.resetSettingsToolStripMenuItem_Click);
             // 
+            // hudVisibleToolStripMenuItem
+            // 
+            this.hudVisibleToolStripMenuItem.Checked = true;
+            this.hudVisibleToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.hudVisibleToolStripMenuItem.Name = "hudVisibleToolStripMenuItem";
+            this.hudVisibleToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.hudVisibleToolStripMenuItem.Text = "HUD Visible";
+            this.hudVisibleToolStripMenuItem.Click += new System.EventHandler(this.hudVisibleToolStripMenuItem_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.advanceToolStripMenuItem1,
+            this.runToolStripMenuItem,
+            this.pauseToolStripMenuItem1,
+            this.toolStripSeparator4,
+            this.gridVisibleToolStripMenuItem,
+            this.neighborCountVisibleToolStripMenuItem,
+            this.hudVisibleToolStripMenuItem1});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(198, 164);
+            // 
+            // neighborCountVisibleToolStripMenuItem
+            // 
+            this.neighborCountVisibleToolStripMenuItem.Name = "neighborCountVisibleToolStripMenuItem";
+            this.neighborCountVisibleToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.neighborCountVisibleToolStripMenuItem.Text = "Neighbor Count Visible";
+            this.neighborCountVisibleToolStripMenuItem.Click += new System.EventHandler(this.neighborCountVisible_ToolStripMenuItem_Click);
+            // 
+            // gridVisibleToolStripMenuItem
+            // 
+            this.gridVisibleToolStripMenuItem.Name = "gridVisibleToolStripMenuItem";
+            this.gridVisibleToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.gridVisibleToolStripMenuItem.Text = "Grid Visible";
+            this.gridVisibleToolStripMenuItem.Click += new System.EventHandler(this.gridVisible_ToolStripMenuItem_Click);
+            // 
+            // hudVisibleToolStripMenuItem1
+            // 
+            this.hudVisibleToolStripMenuItem1.Name = "hudVisibleToolStripMenuItem1";
+            this.hudVisibleToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
+            this.hudVisibleToolStripMenuItem1.Text = "HUD Visible";
+            this.hudVisibleToolStripMenuItem1.Click += new System.EventHandler(this.hudVisibleToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(194, 6);
+            // 
+            // runToolStripMenuItem
+            // 
+            this.runToolStripMenuItem.Image = global::GameOfLife.Properties.Resources.Run;
+            this.runToolStripMenuItem.Name = "runToolStripMenuItem";
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.runToolStripMenuItem.Text = "Run";
+            this.runToolStripMenuItem.Click += new System.EventHandler(this.tsb_run_Click);
+            // 
+            // advanceToolStripMenuItem1
+            // 
+            this.advanceToolStripMenuItem1.Image = global::GameOfLife.Properties.Resources.Advance;
+            this.advanceToolStripMenuItem1.Name = "advanceToolStripMenuItem1";
+            this.advanceToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
+            this.advanceToolStripMenuItem1.Text = "Advance";
+            this.advanceToolStripMenuItem1.Click += new System.EventHandler(this.tsb_advance_Click);
+            // 
+            // pauseToolStripMenuItem1
+            // 
+            this.pauseToolStripMenuItem1.Image = global::GameOfLife.Properties.Resources.Pause;
+            this.pauseToolStripMenuItem1.Name = "pauseToolStripMenuItem1";
+            this.pauseToolStripMenuItem1.Size = new System.Drawing.Size(197, 22);
+            this.pauseToolStripMenuItem1.Text = "Pause";
+            this.pauseToolStripMenuItem1.Click += new System.EventHandler(this.tsb_pause_Click);
+            // 
             // graphicsPanel1
             // 
             this.graphicsPanel1.BackColor = System.Drawing.SystemColors.Window;
@@ -441,15 +523,6 @@
             this.graphicsPanel1.TabIndex = 3;
             this.graphicsPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.graphicsPanel1_Paint);
             this.graphicsPanel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
-            // 
-            // hudVisibleToolStripMenuItem
-            // 
-            this.hudVisibleToolStripMenuItem.Checked = true;
-            this.hudVisibleToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.hudVisibleToolStripMenuItem.Name = "hudVisibleToolStripMenuItem";
-            this.hudVisibleToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.hudVisibleToolStripMenuItem.Text = "HUD Visible";
-            this.hudVisibleToolStripMenuItem.Click += new System.EventHandler(this.hudVisibleToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -471,6 +544,7 @@
             this.toolStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -522,6 +596,14 @@
         private System.Windows.Forms.ToolStripMenuItem reloadSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hudVisibleToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem advanceToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pauseToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem gridVisibleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem neighborCountVisibleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hudVisibleToolStripMenuItem1;
     }
 }
 

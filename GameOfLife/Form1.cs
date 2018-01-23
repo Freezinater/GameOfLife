@@ -63,10 +63,9 @@ namespace GameOfLife
 
             // Initialize the seed.
             seed = rng.Next();
-            
+
             // Disable pause buttons on toolstrip and dropdown menu.
-            tsb_pause.Enabled = false;
-            pauseToolStripMenuItem.Enabled = false;
+            tsb_pause.Enabled = pauseToolStripMenuItem1.Enabled = pauseToolStripMenuItem.Enabled = false;
 
         }
 
@@ -200,9 +199,9 @@ namespace GameOfLife
             tsb_run.Enabled = true;
             tsb_pause.Enabled = false;
 
-            advanceToolStripMenuItem.Enabled = true;
-            startToolStripMenuItem.Enabled = true;
-            pauseToolStripMenuItem.Enabled = false;
+            advanceToolStripMenuItem1.Enabled = advanceToolStripMenuItem.Enabled = tsb_advance.Enabled = true;
+            runToolStripMenuItem.Enabled = startToolStripMenuItem.Enabled = tsb_run.Enabled = true;
+            pauseToolStripMenuItem1.Enabled = pauseToolStripMenuItem.Enabled = tsb_pause.Enabled = false;
         }
 
         // StartSim - Starts simulating generations of the universe.
@@ -214,13 +213,9 @@ namespace GameOfLife
             timer.Start();
 
             // Disable the run and advance buttons and enable the pause button.
-            tsb_advance.Enabled = false;
-            tsb_run.Enabled = false;
-            tsb_pause.Enabled = true;
-
-            advanceToolStripMenuItem.Enabled = false;
-            startToolStripMenuItem.Enabled = false;
-            pauseToolStripMenuItem.Enabled = true;
+            advanceToolStripMenuItem1.Enabled = advanceToolStripMenuItem.Enabled = tsb_advance.Enabled = false;
+            runToolStripMenuItem.Enabled = startToolStripMenuItem.Enabled = tsb_run.Enabled = false;
+            pauseToolStripMenuItem1.Enabled = pauseToolStripMenuItem.Enabled = tsb_pause.Enabled = true;
         }
 
         // ClearUniverse - Clears the universe.
@@ -457,9 +452,9 @@ namespace GameOfLife
             timer.Interval = genDelay;
 
             // Initialize button states from settings
-            gridVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.GridVisible;
-            neighborCountVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.NeighborCountVisible;
-            hudVisibleToolStripMenuItem.Checked = Properties.Settings.Default.HUDVisible;
+            gridVisibleToolStripMenuItem.Checked = gridVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.GridVisible;
+            neighborCountVisibleToolStripMenuItem.Checked = neighborCountVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.NeighborCountVisible;
+            hudVisibleToolStripMenuItem1.Checked = hudVisibleToolStripMenuItem.Checked = Properties.Settings.Default.HUDVisible;
         }
 
         // Event Handlers
@@ -568,6 +563,11 @@ namespace GameOfLife
                 universe[cellX, cellY] = !universe[cellX, cellY];
 
                 graphicsPanel1.Invalidate();
+            }
+
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip1.Show(Cursor.Position);
             }
         }
 
@@ -696,11 +696,11 @@ namespace GameOfLife
             // Toggle the checked status of the button along with the actual setting
             if (gridVisible_ToolStripMenuItem.Checked)
             {
-                gridVisibility = gridVisible_ToolStripMenuItem.Checked = false;
+                gridVisibility = gridVisibleToolStripMenuItem.Checked = gridVisible_ToolStripMenuItem.Checked = false;
             }
             else
             {
-                gridVisibility = gridVisible_ToolStripMenuItem.Checked = true;
+                gridVisibility = gridVisibleToolStripMenuItem.Checked = gridVisible_ToolStripMenuItem.Checked = true;
             }
 
             graphicsPanel1.Invalidate();
@@ -718,11 +718,11 @@ namespace GameOfLife
             // Toggle the checked status of the button along with the actual setting
             if (hudVisibleToolStripMenuItem.Checked)
             {
-                hudVisiblity = hudVisibleToolStripMenuItem.Checked = false;
+                hudVisiblity = hudVisibleToolStripMenuItem1.Checked = hudVisibleToolStripMenuItem.Checked = false;
             }
             else
             {
-                hudVisiblity = hudVisibleToolStripMenuItem.Checked = true;
+                hudVisiblity = hudVisibleToolStripMenuItem1.Checked = hudVisibleToolStripMenuItem.Checked = true;
             }
 
             graphicsPanel1.Invalidate();
@@ -742,11 +742,11 @@ namespace GameOfLife
             // Toggle the checked status of the button along with the actual setting
             if (neighborCountVisible_ToolStripMenuItem.Checked)
             {
-                neighborCountVisiblity = neighborCountVisible_ToolStripMenuItem.Checked = false;
+                neighborCountVisiblity = neighborCountVisibleToolStripMenuItem.Checked = neighborCountVisible_ToolStripMenuItem.Checked = false;
             }
             else
             {
-                neighborCountVisiblity = neighborCountVisible_ToolStripMenuItem.Checked = true;
+                neighborCountVisiblity = neighborCountVisibleToolStripMenuItem.Checked = neighborCountVisible_ToolStripMenuItem.Checked = true;
             }
 
             graphicsPanel1.Invalidate();
