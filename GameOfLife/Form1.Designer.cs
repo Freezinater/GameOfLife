@@ -125,7 +125,7 @@
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.newToolStripMenuItem.Text = "&Clear";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.tsb_clear_Click);
             // 
             // openToolStripMenuItem
             // 
@@ -174,6 +174,7 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -190,9 +191,9 @@
             // 
             this.advanceToolStripMenuItem.Image = global::GameOfLife.Properties.Resources.Advance;
             this.advanceToolStripMenuItem.Name = "advanceToolStripMenuItem";
-            this.advanceToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.advanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.advanceToolStripMenuItem.Text = "&Advance";
-            this.advanceToolStripMenuItem.Click += new System.EventHandler(this.advanceToolStripMenuItem_Click);
+            this.advanceToolStripMenuItem.Click += new System.EventHandler(this.tsb_advance_Click);
             // 
             // toolStripSeparator3
             // 
@@ -204,18 +205,18 @@
             this.startToolStripMenuItem.Image = global::GameOfLife.Properties.Resources.Run;
             this.startToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.startToolStripMenuItem.Text = "&Start";
-            this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
+            this.startToolStripMenuItem.Click += new System.EventHandler(this.tsb_run_Click);
             // 
             // pauseToolStripMenuItem
             // 
             this.pauseToolStripMenuItem.Image = global::GameOfLife.Properties.Resources.Pause;
             this.pauseToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
-            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.pauseToolStripMenuItem.Text = "&Pause";
-            this.pauseToolStripMenuItem.Click += new System.EventHandler(this.pauseToolStripMenuItem_Click);
+            this.pauseToolStripMenuItem.Click += new System.EventHandler(this.tsb_pause_Click);
             // 
             // viewToolStripMenuItem
             // 

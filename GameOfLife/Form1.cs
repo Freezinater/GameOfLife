@@ -13,6 +13,7 @@ namespace GameOfLife
 {
     public partial class Form1 : Form
     {
+        #region Member Variables
         // Variables for universe size
         int width, height;
 
@@ -44,12 +45,17 @@ namespace GameOfLife
 
         // Timer delay setting
         int genDelay;
+        #endregion Member Variables
+
+        #region Core Functions
+
+        #region Simulation
 
         public Form1()
         {
             // Initialize Settings
             LoadSettings();
-            
+
             universe = new bool[width, height];
             InitializeComponent();
 
@@ -262,6 +268,65 @@ namespace GameOfLife
             graphicsPanel1.Invalidate();
         }
 
+        // CountLivingCells - Counts the amount of live cells in the universe
+        //
+        // Parameters: None
+        private int CountLivingCells()
+        {
+            int count = 0;
+
+            // Loop through the universe
+            for (int x = 0; x < universe.GetLength(0); x++)
+            {
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    if (universe[x, y])
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+        #endregion Simulation
+        #region Settings
+
+        // LoadSettings - Loads the application settings
+        //
+        // Parameters: None
+        private void LoadSettings()
+        {
+            width = Properties.Settings.Default.UniverseWidth;
+            height = Properties.Settings.Default.UniverseHeight;
+            neighborCountVisiblity = Properties.Settings.Default.NeighborCountVisible;
+            gridVisibility = Properties.Settings.Default.GridVisible;
+            genDelay = Properties.Settings.Default.GenerationDelay;
+            boundaryWrap = Properties.Settings.Default.BoundaryWrap;
+            gridColor = Properties.Settings.Default.GridColor;
+            cellColor = Properties.Settings.Default.LiveCellColor;
+            backgroundColor = Properties.Settings.Default.DeadCellColor;
+            hudVisiblity = Properties.Settings.Default.HUDVisible;
+        }
+
+        // ApplySettings - Apply Settings
+        //
+        // Parameters: None
+        private void ApplySettings()
+        {
+            //Apply background color
+            graphicsPanel1.BackColor = backgroundColor;
+            // Set Timer Interval
+            timer.Interval = genDelay;
+
+            // Initialize button states from settings
+            gridVisibleToolStripMenuItem.Checked = gridVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.GridVisible;
+            neighborCountVisibleToolStripMenuItem.Checked = neighborCountVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.NeighborCountVisible;
+            hudVisibleToolStripMenuItem1.Checked = hudVisibleToolStripMenuItem.Checked = Properties.Settings.Default.HUDVisible;
+        }
+        #endregion Settings
+        #region File I/O
+
         // SaveUniverse - Saves the universe array to a file given via SaveFileDialog
         //
         // Parameters: None
@@ -416,7 +481,7 @@ namespace GameOfLife
                     if (overwrite)
                     {
                         generations = 0;
-                        
+
                         width = universe.GetLength(0);
                         height = universe.GetLength(1);
                     }
@@ -432,73 +497,23 @@ namespace GameOfLife
                     {
                         reader.Close();
                     }
-                    
+
                     graphicsPanel1.Invalidate();
                 }
             }
         }
+        #endregion File I/O
+        #endregion Core Functions
 
-        // CountLivingCells - Counts the amount of live cells in the universe
-        //
-        // Parameters: None
-        private int CountLivingCells()
-        {
-            int count = 0;
+        #region Event Handlers
+        // Event Handlers that feature more than 1 function call.
 
-            // Loop through the universe
-            for (int x = 0; x < universe.GetLength(0); x++)
-            {
-                for (int y = 0; y < universe.GetLength(1); y++)
-                {
-                    if (universe[x, y])
-                    {
-                        count++;
-                    }
-                }
-            }
-
-            return count;
-        }
-
-        // LoadSettings - Loads the application settings
-        //
-        // Parameters: None
-        private void LoadSettings()
-        {
-            width = Properties.Settings.Default.UniverseWidth;
-            height = Properties.Settings.Default.UniverseHeight;
-            neighborCountVisiblity = Properties.Settings.Default.NeighborCountVisible;
-            gridVisibility = Properties.Settings.Default.GridVisible;
-            genDelay = Properties.Settings.Default.GenerationDelay;
-            boundaryWrap = Properties.Settings.Default.BoundaryWrap;
-            gridColor = Properties.Settings.Default.GridColor;
-            cellColor = Properties.Settings.Default.LiveCellColor;
-            backgroundColor = Properties.Settings.Default.DeadCellColor;
-            hudVisiblity = Properties.Settings.Default.HUDVisible;
-        }
-
-        // ApplySettings - Apply Settings
-        //
-        // Parameters: None
-        private void ApplySettings()
-        {
-            //Apply background color
-            graphicsPanel1.BackColor = backgroundColor;
-            // Set Timer Interval
-            timer.Interval = genDelay;
-
-            // Initialize button states from settings
-            gridVisibleToolStripMenuItem.Checked = gridVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.GridVisible;
-            neighborCountVisibleToolStripMenuItem.Checked = neighborCountVisible_ToolStripMenuItem.Checked = Properties.Settings.Default.NeighborCountVisible;
-            hudVisibleToolStripMenuItem1.Checked = hudVisibleToolStripMenuItem.Checked = Properties.Settings.Default.HUDVisible;
-        }
-
-        // Event Handlers
+        // Paint Event
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
             // The width and height of each cell in pixels
-            float cellWidth = (float) graphicsPanel1.Width / universe.GetLength(0);
-            float cellHeight = (float) graphicsPanel1.Height / universe.GetLength(1);
+            float cellWidth = (float)graphicsPanel1.Width / universe.GetLength(0);
+            float cellHeight = (float)graphicsPanel1.Height / universe.GetLength(1);
 
             // A Pen for drawing the grid lines (color, width)
             Pen gridPen = new Pen(gridColor, 1);
@@ -576,12 +591,14 @@ namespace GameOfLife
             liveCells_statusLabel.Text = "Living Cells: " + CountLivingCells();
         }
 
+        // Fired based on Timer interval
         private void Tick(object sender, EventArgs e)
         {
             //Advance 1 generation
             NextGeneration();
         }
 
+        // When user clicks in the universe
         private void graphicsPanel1_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -607,64 +624,22 @@ namespace GameOfLife
             }
         }
 
-        private void Form1_ResizeEnd(object sender, EventArgs e)
-        {
-            graphicsPanel1.Invalidate();
-        }
-
-        private void tsb_advance_Click(object sender, EventArgs e)
-        {
-            NextGeneration();
-        }
-
-        private void tsb_pause_Click(object sender, EventArgs e)
-        {
-            StopSim();
-        }
-
-        private void tsb_run_Click(object sender, EventArgs e)
-        {
-            StartSim();
-        }
-
-        private void tsb_clear_Click(object sender, EventArgs e)
-        {
-            ClearUniverse();
-        }
-
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ClearUniverse();
-        }
-
-        private void advanceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            NextGeneration();
-        }
-
-        private void startToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            StartSim();
-        }
-
-        private void pauseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            StopSim();
-        }
-
+        // When user clicks to generate universe from system time
         private void fromSystemTimeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Gets a long of the ticks of the current date and time. Afterwards, cast it to an int.
-            seed = (int) DateTime.Now.Ticks;
+            seed = (int)DateTime.Now.Ticks;
             RandomizeUniverse(seed);
         }
 
+        // When user clicks to generate universe from current seed
         private void fromCurrentSeedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Does nothing with the current seed and just creates a new universe with said seed.
             RandomizeUniverse(seed);
         }
 
+        // When user clicks to generate universe from specific seed
         private void fromNewSeedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Create a dialog to allow user to input seed.
@@ -678,16 +653,7 @@ namespace GameOfLife
             }
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveUniverse();
-        }
-
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LoadUniverse();
-        }
-
+        // When user clicks to open the Settings menu
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Initialize and open our settings window.
@@ -727,6 +693,7 @@ namespace GameOfLife
             graphicsPanel1.Invalidate();
         }
 
+        // When user toggles grid visibility
         private void gridVisible_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Toggle the checked status of the button along with the actual setting
@@ -742,13 +709,7 @@ namespace GameOfLife
             graphicsPanel1.Invalidate();
         }
 
-        private void reloadSettingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LoadSettings();
-            ClearUniverse();
-            ApplySettings();
-        }
-
+        // When user toggles HUD visibility
         private void hudVisibleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Toggle the checked status of the button along with the actual setting
@@ -764,20 +725,7 @@ namespace GameOfLife
             graphicsPanel1.Invalidate();
         }
 
-        private void import_toolStripItem_Click(object sender, EventArgs e)
-        {
-            LoadUniverse(false);
-        }
-
-        private void resetSettingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.Reset();
-
-            LoadSettings();
-            ClearUniverse();
-            ApplySettings();
-        }
-
+        // When user toggles neighbor count visibility
         private void neighborCountVisible_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Toggle the checked status of the button along with the actual setting
@@ -793,6 +741,25 @@ namespace GameOfLife
             graphicsPanel1.Invalidate();
         }
 
+        // When user clicks Reload Settings
+        private void reloadSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadSettings();
+            ClearUniverse();
+            ApplySettings();
+        }
+        
+        // When user clicks Reset Settings
+        private void resetSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+
+            LoadSettings();
+            ClearUniverse();
+            ApplySettings();
+        }
+
+        // When the user closes the window.
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             // Save the settings for next time.
@@ -809,5 +776,64 @@ namespace GameOfLife
 
             Properties.Settings.Default.Save();
         }
+        #endregion Event Handlers
+
+        #region Simple Event Handlers
+        // All of these event handlers just call another function and nothing more.
+
+        // When user resizes the window.
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+            graphicsPanel1.Invalidate();
+        }
+
+        // When the user clicks an Advance button.
+        private void tsb_advance_Click(object sender, EventArgs e)
+        {
+            NextGeneration();
+        }
+
+        // When the user clicks a Pause button.
+        private void tsb_pause_Click(object sender, EventArgs e)
+        {
+            StopSim();
+        }
+
+        // When the user clicks a Run button.
+        private void tsb_run_Click(object sender, EventArgs e)
+        {
+            StartSim();
+        }
+
+        // When the user clicks a Clear Universe button.
+        private void tsb_clear_Click(object sender, EventArgs e)
+        {
+            ClearUniverse();
+        }
+
+        // When the user clicks Save in File menu.
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveUniverse();
+        }
+
+        // When the user clicks Open in File Menu.
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadUniverse();
+        }
+
+        // When user clicks Import in File menu.
+        private void import_toolStripItem_Click(object sender, EventArgs e)
+        {
+            LoadUniverse(false);
+        }
+
+        // When the user clicks Exit in File menu.
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+        #endregion Simple Event Handlers
     }
 }
