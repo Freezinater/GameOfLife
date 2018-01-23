@@ -41,11 +41,18 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btn_gridColor = new System.Windows.Forms.Button();
+            this.btn_deadCellColor = new System.Windows.Forms.Button();
+            this.btn_liveCellColor = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.num_Width)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_Height)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_Delay)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_OK
@@ -180,6 +187,12 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label7);
+            this.tabPage2.Controls.Add(this.label6);
+            this.tabPage2.Controls.Add(this.label5);
+            this.tabPage2.Controls.Add(this.btn_liveCellColor);
+            this.tabPage2.Controls.Add(this.btn_deadCellColor);
+            this.tabPage2.Controls.Add(this.btn_gridColor);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -187,6 +200,60 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Appearance";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // btn_gridColor
+            // 
+            this.btn_gridColor.Location = new System.Drawing.Point(15, 20);
+            this.btn_gridColor.Name = "btn_gridColor";
+            this.btn_gridColor.Size = new System.Drawing.Size(33, 27);
+            this.btn_gridColor.TabIndex = 0;
+            this.btn_gridColor.UseVisualStyleBackColor = true;
+            this.btn_gridColor.Click += new System.EventHandler(this.ColorButtonClick);
+            // 
+            // btn_deadCellColor
+            // 
+            this.btn_deadCellColor.Location = new System.Drawing.Point(15, 53);
+            this.btn_deadCellColor.Name = "btn_deadCellColor";
+            this.btn_deadCellColor.Size = new System.Drawing.Size(33, 27);
+            this.btn_deadCellColor.TabIndex = 1;
+            this.btn_deadCellColor.UseVisualStyleBackColor = true;
+            this.btn_deadCellColor.Click += new System.EventHandler(this.ColorButtonClick);
+            // 
+            // btn_liveCellColor
+            // 
+            this.btn_liveCellColor.Location = new System.Drawing.Point(15, 86);
+            this.btn_liveCellColor.Name = "btn_liveCellColor";
+            this.btn_liveCellColor.Size = new System.Drawing.Size(33, 27);
+            this.btn_liveCellColor.TabIndex = 2;
+            this.btn_liveCellColor.UseVisualStyleBackColor = true;
+            this.btn_liveCellColor.Click += new System.EventHandler(this.ColorButtonClick);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(54, 27);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(53, 13);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "Grid Color";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(54, 60);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(80, 13);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "Dead Cell Color";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(54, 93);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(74, 13);
+            this.label7.TabIndex = 3;
+            this.label7.Text = "Live Cell Color";
             // 
             // SettingsDialog
             // 
@@ -214,6 +281,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -233,5 +302,11 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btn_liveCellColor;
+        private System.Windows.Forms.Button btn_deadCellColor;
+        private System.Windows.Forms.Button btn_gridColor;
     }
 }

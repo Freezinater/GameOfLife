@@ -94,5 +94,41 @@ namespace GameOfLife.Properties {
                 this["BoundaryWrap"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
+        public global::System.Drawing.Color GridColor {
+            get {
+                return ((global::System.Drawing.Color)(this["GridColor"]));
+            }
+            set {
+                this["GridColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color DeadCellColor {
+            get {
+                return ((global::System.Drawing.Color)(this["DeadCellColor"]));
+            }
+            set {
+                this["DeadCellColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Gray")]
+        public global::System.Drawing.Color LiveCellColor {
+            get {
+                return ((global::System.Drawing.Color)(this["LiveCellColor"]));
+            }
+            set {
+                this["LiveCellColor"] = value;
+            }
+        }
     }
 }

@@ -26,8 +26,9 @@ namespace GameOfLife
         int seed;
 
         // Drawing colors
-        Color gridColor = Color.Black;
-        Color cellColor = Color.Gray;
+        Color gridColor;
+        Color cellColor;
+        Color backgroundColor;
 
         // The Timer class
         Timer timer = new Timer();
@@ -47,15 +48,12 @@ namespace GameOfLife
         public Form1()
         {
             // Initialize Settings
-            width = Properties.Settings.Default.UniverseWidth;
-            height = Properties.Settings.Default.UniverseHeight;
-            neighborCountVisiblity = Properties.Settings.Default.NeighborCountVisible;
-            gridVisibility = Properties.Settings.Default.GridVisible;
-            genDelay = Properties.Settings.Default.GenerationDelay;
-            boundaryWrap = Properties.Settings.Default.BoundaryWrap;
-
+            LoadSettings();
+            
             universe = new bool[width, height];
             InitializeComponent();
+
+            graphicsPanel1.BackColor = backgroundColor;
 
             // Initialize timer
             timer.Interval = genDelay;
@@ -433,6 +431,22 @@ namespace GameOfLife
             return count;
         }
 
+        // LoadSettings - Loads the application settings
+        //
+        // Parameters: None
+        private void LoadSettings()
+        {
+            width = Properties.Settings.Default.UniverseWidth;
+            height = Properties.Settings.Default.UniverseHeight;
+            neighborCountVisiblity = Properties.Settings.Default.NeighborCountVisible;
+            gridVisibility = Properties.Settings.Default.GridVisible;
+            genDelay = Properties.Settings.Default.GenerationDelay;
+            boundaryWrap = Properties.Settings.Default.BoundaryWrap;
+            gridColor = Properties.Settings.Default.GridColor;
+            cellColor = Properties.Settings.Default.LiveCellColor;
+            backgroundColor = Properties.Settings.Default.DeadCellColor;
+        }
+
         // Event Handlers
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
@@ -621,6 +635,9 @@ namespace GameOfLife
             dlg.HeightValue = height;
             dlg.DelayValue = genDelay;
             dlg.BoundaryValue = boundaryWrap;
+            dlg.GridColorValue = gridColor;
+            dlg.LiveCellColorValue = cellColor;
+            dlg.DeadCellColorValue = backgroundColor;
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
@@ -638,6 +655,11 @@ namespace GameOfLife
 
                 // Set the universe type to the new value.
                 boundaryWrap = dlg.BoundaryValue;
+
+                // Update color settings
+                backgroundColor = graphicsPanel1.BackColor = dlg.DeadCellColorValue;
+                gridColor = dlg.GridColorValue;
+                cellColor = dlg.LiveCellColorValue;
             }
         }
 
@@ -680,6 +702,9 @@ namespace GameOfLife
             Properties.Settings.Default.UniverseWidth = width;
             Properties.Settings.Default.GenerationDelay = genDelay;
             Properties.Settings.Default.BoundaryWrap = boundaryWrap;
+            Properties.Settings.Default.GridColor = gridColor;
+            Properties.Settings.Default.DeadCellColor = backgroundColor;
+            Properties.Settings.Default.LiveCellColor = cellColor;
 
             Properties.Settings.Default.Save();
         }

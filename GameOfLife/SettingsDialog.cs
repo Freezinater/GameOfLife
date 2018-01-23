@@ -61,6 +61,42 @@ namespace GameOfLife
             }
         }
 
+        public Color GridColorValue
+        {
+            get
+            {
+                return btn_gridColor.BackColor;
+            }
+            set
+            {
+                btn_gridColor.BackColor = value;
+            }
+        }
+
+        public Color DeadCellColorValue
+        {
+            get
+            {
+                return btn_deadCellColor.BackColor;
+            }
+            set
+            {
+                btn_deadCellColor.BackColor = value;
+            }
+        }
+
+        public Color LiveCellColorValue
+        {
+            get
+            {
+                return btn_liveCellColor.BackColor;
+            }
+            set
+            {
+                btn_liveCellColor.BackColor = value;
+            }
+        }
+
         public SettingsDialog()
         {
             InitializeComponent();
@@ -70,6 +106,17 @@ namespace GameOfLife
         {
 
             this.DialogResult = DialogResult.OK;
+        }
+
+        private void ColorButtonClick(object sender, EventArgs e)
+        {
+            ColorDialog dlg = new ColorDialog();
+            dlg.Color = ((Button)sender).BackColor;
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                ((Button)sender).BackColor = dlg.Color;
+            }
         }
     }
 }
