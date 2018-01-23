@@ -82,5 +82,17 @@ namespace GameOfLife.Properties {
                 this["GenerationDelay"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool BoundaryWrap {
+            get {
+                return ((bool)(this["BoundaryWrap"]));
+            }
+            set {
+                this["BoundaryWrap"] = value;
+            }
+        }
     }
 }

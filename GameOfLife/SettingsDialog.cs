@@ -49,6 +49,18 @@ namespace GameOfLife
             }
         }
 
+        public bool BoundaryValue
+        {
+            get
+            {
+                return cbox_UniverseStyle.Checked;
+            }
+            set
+            {
+                cbox_UniverseStyle.Checked = value;
+            }
+        }
+
         public SettingsDialog()
         {
             InitializeComponent();

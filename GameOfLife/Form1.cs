@@ -38,6 +38,9 @@ namespace GameOfLife
         // View settings
         bool gridVisibility, neighborCountVisiblity;
 
+        // Boundary settings
+        bool boundaryWrap;
+
         // Timer delay setting
         int genDelay;
 
@@ -49,6 +52,7 @@ namespace GameOfLife
             neighborCountVisiblity = Properties.Settings.Default.NeighborCountVisible;
             gridVisibility = Properties.Settings.Default.GridVisible;
             genDelay = Properties.Settings.Default.GenerationDelay;
+            boundaryWrap = Properties.Settings.Default.BoundaryWrap;
 
             universe = new bool[width, height];
             InitializeComponent();
@@ -141,13 +145,41 @@ namespace GameOfLife
                 for (int iy = y - 1; iy <= y + 1; iy++)
                 {
                     // Check that the coordinate is in bounds of the array.
-                    if (!(iy < 0 || iy >= grid.GetLength(1) || ix < 0 || ix >= grid.GetLength(0)))
+                    if (!boundaryWrap)
                     {
-                        // Check that the coordinates are not the ones of the cell passed in. We don't want to count it as a living neighbor.
-                        if (ix != x || iy != y)
+                        if (!(iy < 0 || iy >= grid.GetLength(1) || ix < 0 || ix >= grid.GetLength(0)))
                         {
-                            // Increment count if the neighbor cell is alive.
-                            if (grid[ix, iy])
+                            // Check that the coordinates are not the ones of the cell passed in. We don't want to count it as a living neighbor.
+                            if (ix != x || iy != y)
+                            {
+                                // Increment count if the neighbor cell is alive.
+                                if (grid[ix, iy])
+                                {
+                                    count++;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Temporary coordinates to check without modifying the loop variables, which work with boundary wrapping.
+                        int tempX = ix, tempY = iy;
+
+                        // Adjust the check coordinates to wrap over boundaries.
+                        if (ix < 0)
+                            tempX = grid.GetLength(0) - 1;
+                        if (ix > grid.GetLength(0) - 1)
+                            tempX = 0;
+
+                        if (iy < 0)
+                            tempY = grid.GetLength(1) - 1;
+                        if (iy > grid.GetLength(1) - 1)
+                            tempY = 0;
+
+                        // Check we're not checking the cell we're counting for and increment it if it's alive.
+                        if (tempX != x || tempY != y)
+                        {
+                            if (grid[tempX, tempY])
                             {
                                 count++;
                             }
@@ -575,6 +607,11 @@ namespace GameOfLife
             SaveUniverse();
         }
 
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadUniverse();
+        }
+
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Initialize and open our settings window.
@@ -583,6 +620,7 @@ namespace GameOfLife
             dlg.WidthValue = width;
             dlg.HeightValue = height;
             dlg.DelayValue = genDelay;
+            dlg.BoundaryValue = boundaryWrap;
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
@@ -595,7 +633,11 @@ namespace GameOfLife
                     ClearUniverse();
                 }
 
+                // Set the Timer delay to the new value.
                 genDelay = timer.Interval = dlg.DelayValue;
+
+                // Set the universe type to the new value.
+                boundaryWrap = dlg.BoundaryValue;
             }
         }
 
@@ -631,18 +673,15 @@ namespace GameOfLife
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
+            // Save the settings for next time.
             Properties.Settings.Default.GridVisible = gridVisibility;
             Properties.Settings.Default.NeighborCountVisible = neighborCountVisiblity;
             Properties.Settings.Default.UniverseHeight = height;
             Properties.Settings.Default.UniverseWidth = width;
             Properties.Settings.Default.GenerationDelay = genDelay;
+            Properties.Settings.Default.BoundaryWrap = boundaryWrap;
 
             Properties.Settings.Default.Save();
-        }
-
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LoadUniverse();
         }
     }
 }
